@@ -317,10 +317,10 @@ function PlannerOverlay:init()
     self.selected = 1
     self.minimized = false
 
-    local main_panel = widgets.Panel{
+    local main_panel = widgets.ResizingPanel{
         view_id='main',
-        frame={t=0, l=0, r=0, h=14},
-        frame_style=gui.MEDIUM_FRAME,
+        frame={t=0, l=0, r=0, h=13},
+        frame_style=gui.MEDIUM_FRAME_2,
         frame_background=gui.CLEAR_PEN,
         visible=function() return not self.minimized end,
     }
@@ -373,21 +373,21 @@ function PlannerOverlay:init()
                  is_selected_fn=make_is_selected_fn(1), is_hollow_fn=is_hollow_fn,
                  on_select=on_select_fn, on_filter=self:callback('set_filter'),
                  on_clear_filter=self:callback('clear_filter')},
-        ItemLine{view_id='item2', frame={t=2, l=0, r=0}, idx=2,
+        ItemLine{view_id='item2', frame={t=2, l=0, r=0, h=3}, idx=2,
                  is_selected_fn=make_is_selected_fn(2), is_hollow_fn=is_hollow_fn,
                  on_select=on_select_fn, on_filter=self:callback('set_filter'),
                  on_clear_filter=self:callback('clear_filter')},
-        ItemLine{view_id='item3', frame={t=4, l=0, r=0}, idx=3,
+        ItemLine{view_id='item3', frame={t=4, l=0, r=0, h=3}, idx=3,
                  is_selected_fn=make_is_selected_fn(3), is_hollow_fn=is_hollow_fn,
                  on_select=on_select_fn, on_filter=self:callback('set_filter'),
                  on_clear_filter=self:callback('clear_filter')},
-        ItemLine{view_id='item4', frame={t=6, l=0, r=0}, idx=4,
+        ItemLine{view_id='item4', frame={t=6, l=0, r=0, h=3}, idx=4,
                  is_selected_fn=make_is_selected_fn(4), is_hollow_fn=is_hollow_fn,
                  on_select=on_select_fn, on_filter=self:callback('set_filter'),
                  on_clear_filter=self:callback('clear_filter')},
         widgets.CycleHotkeyLabel{
             view_id='hollow',
-            frame={t=3, l=4},
+            frame={b=5, l=1},
             key='CUSTOM_H',
             label='Hollow area:',
             visible=is_construction,
@@ -398,7 +398,7 @@ function PlannerOverlay:init()
         },
         widgets.CycleHotkeyLabel{
             view_id='stairs_top_subtype',
-            frame={t=4, l=4},
+            frame={b=6, l=24},
             key='CUSTOM_R',
             label='Top Stair Type:   ',
             visible=is_stairs,
@@ -410,7 +410,7 @@ function PlannerOverlay:init()
         },
         widgets.CycleHotkeyLabel {
             view_id='stairs_bottom_subtype',
-            frame={t=5, l=4},
+            frame={b=5, l=24},
             key='CUSTOM_B',
             label='Bottom Stair Type:',
             visible=is_stairs,
@@ -422,7 +422,7 @@ function PlannerOverlay:init()
         },
         widgets.CycleHotkeyLabel {
             view_id='weapons',
-            frame={t=5, l=4},
+            frame={b=5, l=1},
             key='CUSTOM_T',
             key_back='CUSTOM_SHIFT_T',
             label='Num weapons:',
@@ -457,29 +457,29 @@ function PlannerOverlay:init()
             visible=function() return #get_cur_filters() > 0 end,
             subviews={
                 widgets.HotkeyLabel{
-                    frame={b=1, l=0},
-                    key='STRING_A042',
+                    frame={b=2, l=23},
+                    key='CUSTOM_SHIFT_Q',
                     auto_width=true,
                     enabled=function() return #get_cur_filters() > 1 end,
                     on_activate=function() self.selected = ((self.selected - 2) % #get_cur_filters()) + 1 end,
                 },
                 widgets.HotkeyLabel{
-                    frame={b=1, l=1},
-                    key='STRING_A047',
+                    frame={b=2, l=24},
+                    key='CUSTOM_Q',
                     label='Prev/next item',
                     auto_width=true,
                     enabled=function() return #get_cur_filters() > 1 end,
                     on_activate=function() self.selected = (self.selected % #get_cur_filters()) + 1 end,
                 },
                 widgets.HotkeyLabel{
-                    frame={b=1, l=21},
+                    frame={b=2, l=1},
                     key='CUSTOM_F',
                     label='Set filter',
                     auto_width=true,
                     on_activate=function() self:set_filter(self.selected) end,
                 },
                 widgets.HotkeyLabel{
-                    frame={b=1, l=37},
+                    frame={b=0, l=1},
                     key='CUSTOM_X',
                     label='Clear filter',
                     auto_width=true,
@@ -490,9 +490,9 @@ function PlannerOverlay:init()
                 },
                 widgets.CycleHotkeyLabel{
                     view_id='choose',
-                    frame={b=0, l=0, w=25},
-                    key='CUSTOM_I',
-                    label='Choose from items:',
+                    frame={b=0, l=24},
+                    key='CUSTOM_Z',
+                    label='Choose items manually:',
                     options={{label='Yes', value=true},
                              {label='No', value=false}},
                     initial_option=false,
@@ -502,7 +502,7 @@ function PlannerOverlay:init()
                 },
                 widgets.CycleHotkeyLabel{
                     view_id='safety',
-                    frame={b=0, l=29, w=25},
+                    frame={b=5, l=24, w=25},
                     key='CUSTOM_G',
                     label='Building safety:',
                     options={
@@ -522,15 +522,15 @@ function PlannerOverlay:init()
 
     local error_panel = widgets.ResizingPanel{
         view_id='errors',
-        frame={t=14, l=0, r=0},
-        frame_style=gui.MEDIUM_FRAME,
+        frame={t=13, l=0, r=0},
+        frame_style=gui.PANEL_FRAME,
         frame_background=gui.CLEAR_PEN,
         visible=function() return not self.minimized end,
     }
 
     error_panel:addviews{
         widgets.WrappedLabel{
-            frame={t=0, l=0, r=0},
+            frame={t=0, l=1, r=0},
             text_pen=COLOR_LIGHTRED,
             text_to_wrap=get_placement_errors,
             visible=function() return #uibs.errors > 0 end,
